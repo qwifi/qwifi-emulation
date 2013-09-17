@@ -1,4 +1,4 @@
-emulate:
+emulate: build
 	killall hostapd || true
 
 	sudo service network-manager stop || true
@@ -20,6 +20,9 @@ build:
 	sudo apt-get install hostapd apache2 freeradius isc-dhcp-server libqrencode3 libqrencode-dev mysql-server
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
+
+	sudo cp -vaur freeradius-conf/* /etc/freeradius/
+	sudo cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
 
 normal:
 	sudo killall hostapd || true
