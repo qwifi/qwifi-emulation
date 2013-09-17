@@ -22,6 +22,7 @@ build:
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
 	sudo cp -vaur freeradius-conf/* /etc/freeradius/
+	sudo chown -R root:freerad /etc/freeradius/*
 	sudo cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
 
 normal:
