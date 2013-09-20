@@ -17,7 +17,7 @@ emulate: build
 	echo "Entered emulation mode."
 
 build:
-	sudo apt-get install hostapd apache2 freeradius isc-dhcp-server libqrencode3 libqrencode-dev mysql-server
+	sudo apt-get install hostapd apache2 freeradius freeradius-mysql isc-dhcp-server libqrencode3 libqrencode-dev mysql-server
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
