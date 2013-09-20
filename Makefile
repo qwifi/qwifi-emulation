@@ -1,4 +1,4 @@
-emulate: build
+emulate: update-config
 	killall hostapd || true
 
 	sudo service network-manager stop || true
@@ -16,11 +16,12 @@ emulate: build
 
 	echo "Entered emulation mode."
 
-build:
+setup:
 	sudo apt-get install hostapd apache2 freeradius freeradius-mysql isc-dhcp-server libqrencode3 libqrencode-dev mysql-server
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
+update-config:
 	sudo cp -vaur freeradius-conf/* /etc/freeradius/
 	sudo chown -R root:freerad /etc/freeradius/*
 	sudo cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
