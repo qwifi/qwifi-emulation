@@ -5,14 +5,14 @@ emulate: update-config
 	sudo service nslcd stop || true
 	sudo service aiccu stop || true
 
-	sudo service mysql start || true
-	sudo service freeradius start || true
+	sudo service mysql restart
+	sudo service freeradius restart
 
 	sudo hostapd hostapd.conf -B
 	sudo ifconfig wlan0 10.0.0.1/8
 
-	sudo service isc-dhcp-server start || true
-	sudo service apache2 start || true
+	sudo service isc-dhcp-server restart
+	sudo service apache2 restart
 
 	echo "Entered emulation mode."
 
@@ -38,6 +38,6 @@ normal:
 	sudo service isc-dhcp-server stop || true
 	sudo service apache2 stop || true
 
-	sudo service network-manager start || true
+	sudo service network-manager restart
 
 	echo "Normalization complete"
