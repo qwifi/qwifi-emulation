@@ -8,7 +8,7 @@ emulate: build
 	sudo service mysql start || true
 	sudo service freeradius start || true
 
-	sudo hostapd hostapd.conf -f hostapd.log -B -d
+	sudo hostapd hostapd.conf -B
 	sudo ifconfig wlan0 10.0.0.1/8
 
 	sudo service isc-dhcp-server start || true
