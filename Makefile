@@ -21,6 +21,11 @@ setup:
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
+        sudo service mysql restart
+        sudo mysql -p -u root radius < freeradius.sql || true
+        sudo mysql -p -u root radius < freeradius-conf/sql/mysql/schema.sql || true
+        sudo service mysql stop
+
 update-config:
 	sudo cp -vaur freeradius-conf/* /etc/freeradius/
 	sudo chown -R root:freerad /etc/freeradius/*
