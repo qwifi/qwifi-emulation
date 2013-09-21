@@ -13,4 +13,4 @@ Inital Setup
 Usage
 ===============
 
-Run "sudo make emulate" to put the laptop in emulation mode. To return to normality, run "sudo make normal"
+Run "sudo make emulate" to enter emulation mode. To return to normality, run "sudo make normal"
