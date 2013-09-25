@@ -17,7 +17,7 @@ emulate: update-config
 	echo "Entered emulation mode."
 
 setup: pyqrencode
-	sudo apt-get install hostapd apache2 freeradius freeradius-mysql isc-dhcp-server libqrencode3 libqrencode-dev mysql-server libapache2-mod-wsgi
+	sudo apt-get install hostapd apache2 freeradius freeradius-mysql isc-dhcp-server mysql-server libapache2-mod-wsgi python-mysqldb
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
@@ -27,7 +27,7 @@ setup: pyqrencode
 	sudo service mysql stop
 
 pyqrencode:
-	sudo apt-get install git python-dev
+	sudo apt-get install git python-dev libqrencode3 libqrencode-dev
 	git clone https://github.com/bitly/pyqrencode.git /tmp/pyqrencode || true
 	cd /tmp/pyqrencode && sudo python setup.py install
 
