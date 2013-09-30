@@ -1,3 +1,6 @@
 [submodule "freeradius-conf"]
 	path = freeradius-conf
 	url = https://github.com/qwifi/qwifi-radius
+[submodule "ui"]
+	path = ui
+	url = https://github.com/qwifi/qwifi-ui

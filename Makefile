@@ -16,8 +16,8 @@ emulate: update-config
 
 	echo "Entered emulation mode."
 
-setup: setup-pyqrencode
-	sudo apt-get install hostapd apache2 freeradius freeradius-mysql isc-dhcp-server mysql-server libapache2-mod-wsgi python-mysqldb
+setup: setup-apache setup-pyqrencode
+	sudo apt-get install hostapd freeradius freeradius-mysql isc-dhcp-server mysql-server libapache2-mod-wsgi python-mysqldb
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
@@ -31,10 +31,19 @@ setup-pyqrencode:
 	git clone https://github.com/bitly/pyqrencode.git /tmp/pyqrencode || true
 	cd /tmp/pyqrencode && sudo python setup.py install
 
+setup-apache:
+	sudo apt-get install apache2
+	sudo cp ui/qwifi-site /etc/apache2/sites-available/qwifi
+	sudo rm -f /etc/apache2/sites-enabled/000-default
+	sudo ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
+	sudo mkdir -p /usr/local/wsgi/scripts/
+	sudo cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
+
 update-config:
 	sudo cp -vaur freeradius-conf/* /etc/freeradius/
 	sudo chown -R root:freerad /etc/freeradius/*
 	sudo cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
+	sudo cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
 normal:
 	sudo killall hostapd || true
