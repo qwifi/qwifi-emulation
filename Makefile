@@ -16,8 +16,8 @@ emulate: update-config
 
 	echo "Entered emulation mode."
 
-setup: setup-apache setup-pyqrencode
-	sudo apt-get install hostapd freeradius freeradius-mysql isc-dhcp-server mysql-server python-mysqldb
+setup: setup-apache setup-pyqrencode setup-freeradius
+	sudo apt-get install hostapd isc-dhcp-server mysql-server python-mysqldb
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
@@ -25,6 +25,12 @@ setup: setup-apache setup-pyqrencode
 	sudo mysql -p -u root < freeradius.sql || true
 	sudo mysql -p -u root radius < freeradius-conf/sql/mysql/schema.sql || true
 	sudo service mysql stop
+
+setup-freeradius:
+	sudo apt-get install freeradius freeradius-mysql 
+	sudo mkdir -p /etc/freeradius
+	sudo cp -vaur freeradius-conf/* /etc/freeradius/
+	sudo chown -R root:freerad /etc/freeradius
 
 setup-pyqrencode:
 	sudo apt-get install git python-dev libqrencode3 libqrencode-dev
