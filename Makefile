@@ -17,7 +17,7 @@ emulate: update-config
 	echo "Entered emulation mode."
 
 setup: setup-apache setup-pyqrencode
-	sudo apt-get install hostapd freeradius freeradius-mysql isc-dhcp-server mysql-server libapache2-mod-wsgi python-mysqldb
+	sudo apt-get install hostapd freeradius freeradius-mysql isc-dhcp-server mysql-server python-mysqldb
 	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
 	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
@@ -32,7 +32,7 @@ setup-pyqrencode:
 	cd /tmp/pyqrencode && sudo python setup.py install
 
 setup-apache:
-	sudo apt-get install apache2
+	sudo apt-get install apache2 libapache2-mod-wsgi
 	sudo cp ui/qwifi-site /etc/apache2/sites-available/qwifi
 	sudo rm -f /etc/apache2/sites-enabled/000-default
 	sudo ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
