@@ -33,7 +33,7 @@ setup-freeradius:
 	sudo chown -R root:freerad /etc/freeradius
 
 setup-pyqrencode:
-	sudo apt-get install git python-dev libqrencode3 libqrencode-dev
+	sudo apt-get install git python-dev libqrencode3 libqrencode-dev python-imaging
 	git clone https://github.com/bitly/pyqrencode.git /tmp/pyqrencode || true
 	cd /tmp/pyqrencode && sudo python setup.py install
 
