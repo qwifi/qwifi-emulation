@@ -44,6 +44,8 @@ setup-apache:
 	sudo ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
 	sudo mkdir -p /usr/local/wsgi/scripts/
 	sudo cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
+	sudo groupadd -f qwifi
+	sudo usermod -a -G qwifi www-data
 
 update-config:
 	sudo cp -vaur freeradius-conf/* /etc/freeradius/
