@@ -47,14 +47,9 @@ setup-apache:
 	mkdir -p /usr/local/wsgi/scripts/
 	cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
-	cp ui/mod_wsgi/index.wsgi /usr/local/wsgi/scripts/index.wsgi
-
-	mkdir -p /usr/local/wsgi/scripts/config
-	cp ui/mod_wsgi/update.wsgi /usr/local/wsgi/scripts/config/update.wsgi
-
 	#copy templates
 	mkdir -p /usr/local/wsgi/templates/
-	cp ui/mod_wsgi/base.txt /usr/local/wsgi/templates/base
+	cp ui/resources/html/base.txt /usr/local/wsgi/templates/base.txt
 
 	groupadd -f qwifi
 	usermod -a -G qwifi www-data
