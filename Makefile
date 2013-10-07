@@ -1,80 +1,80 @@
 emulate: update-config
 	killall hostapd || true
 
-	sudo service network-manager stop || true
-	sudo service nslcd stop || true
-	sudo service aiccu stop || true
+	service network-manager stop || true
+	service nslcd stop || true
+	service aiccu stop || true
 
-	sudo service mysql restart
-	sudo service freeradius restart
+	service mysql restart
+	service freeradius restart
 
-	sudo hostapd hostapd.conf -B
-	sudo ifconfig wlan0 10.0.0.1/8
+	hostapd hostapd.conf -B
+	ifconfig wlan0 10.0.0.1/8
 
-	sudo service isc-dhcp-server restart
-	sudo service apache2 restart
+	service isc-dhcp-server restart
+	service apache2 restart
 
 	echo "Entered emulation mode."
 
 setup: setup-apache setup-pyqrencode setup-freeradius
-	sudo apt-get install hostapd isc-dhcp-server mysql-server python-mysqldb
-	sudo bash -c 'echo "manual" > /etc/init/hostapd.override'
-	sudo bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
+	apt-get install hostapd isc-dhcp-server mysql-server python-mysqldb
+	bash -c 'echo "manual" > /etc/init/hostapd.override'
+	bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
-	sudo service mysql restart
-	sudo mysql -p -u root < freeradius.sql || true
-	sudo mysql -p -u root radius < freeradius-conf/sql/mysql/schema.sql || true
-	sudo service mysql stop
+	service mysql restart
+	mysql -p -u root < freeradius.sql || true
+	mysql -p -u root radius < freeradius-conf/sql/mysql/schema.sql || true
+	service mysql stop
 
 setup-freeradius:
-	sudo apt-get install freeradius freeradius-mysql 
-	sudo mkdir -p /etc/freeradius
-	sudo cp -vaur freeradius-conf/* /etc/freeradius/
-	sudo chown -R root:freerad /etc/freeradius
+	apt-get install freeradius freeradius-mysql 
+	mkdir -p /etc/freeradius
+	cp -vaur freeradius-conf/* /etc/freeradius/
+	chown -R root:freerad /etc/freeradius
 
 setup-pyqrencode:
-	sudo apt-get install git python-dev libqrencode3 libqrencode-dev python-imaging
+	apt-get install git python-dev libqrencode3 libqrencode-dev python-imaging
 	git clone https://github.com/bitly/pyqrencode.git /tmp/pyqrencode || true
-	cd /tmp/pyqrencode && sudo python setup.py install
+	cd /tmp/pyqrencode && python setup.py install
 
 setup-apache:
-	sudo apt-get install apache2 libapache2-mod-wsgi
-	sudo cp ui/qwifi-site /etc/apache2/sites-available/qwifi
-	sudo rm -f /etc/apache2/sites-enabled/000-default
-	sudo ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
+	apt-get install apache2 libapache2-mod-wsgi
+	cp ui/qwifi-site /etc/apache2/sites-available/qwifi
+	rm -f /etc/apache2/sites-enabled/000-default
+	ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
 
 	#copy scripts
-	sudo mkdir -p /usr/local/wsgi/scripts/
-	sudo cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
+	mkdir -p /usr/local/wsgi/scripts/
+	cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
-	sudo cp ui/mod_wsgi/index.wsgi /usr/local/wsgi/scripts/index.wsgi
+	cp ui/mod_wsgi/index.wsgi /usr/local/wsgi/scripts/index.wsgi
 
-	sudo mkdir -p /usr/local/wsgi/scripts/config
-	sudo cp ui/mod_wsgi/update.wsgi /usr/local/wsgi/scripts/config/update.wsgi
+	mkdir -p /usr/local/wsgi/scripts/config
+	cp ui/mod_wsgi/update.wsgi /usr/local/wsgi/scripts/config/update.wsgi
 
 	#copy templates
-	sudo mkdir -p /usr/local/wsgi/templates/
-	sudo cp ui/mod_wsgi/base.txt /usr/local/wsgi/templates/base
+	mkdir -p /usr/local/wsgi/templates/
+	cp ui/mod_wsgi/base.txt /usr/local/wsgi/templates/base
 
-	sudo groupadd -f qwifi
-	sudo usermod -a -G qwifi www-data
+	groupadd -f qwifi
+	usermod -a -G qwifi www-data
 
-	sudo mkdir -p /var/www/config
-	sudo chown www-data:www-data /var/www/config
+	mkdir -p /var/www/config
+	chown www-data:www-data /var/www/config
 
 update-config:
-	sudo cp -vaur freeradius-conf/* /etc/freeradius/
-	sudo chown -R root:freerad /etc/freeradius/*
-	sudo cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
-	sudo cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
+	cp -vaur freeradius-conf/* /etc/freeradius/
+	chown -R root:freerad /etc/freeradius/*
+	cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
+	cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
 normal:
-	sudo killall hostapd || true
-	sudo service freeradius stop || true
-	sudo service mysql stop || true
-	sudo service isc-dhcp-server stop || true
-	sudo service apache2 stop || true
+	killall hostapd || true
+	service freeradius stop || true
+	service mysql stop || true
+	service isc-dhcp-server stop || true
+	service apache2 stop || true
 
-	sudo service network-manager restart
+	service network-manager restart
 
 	echo "Normalization complete"
