@@ -53,7 +53,7 @@ setup-apache:
 	mkdir -p /usr/local/wsgi/templates/
 	#make sure the destination is clean
 	rm -rf /usr/local/wsgi/templates/*
-	cp ui/resources/html/base.txt /usr/local/wsgi/templates/base.txt
+	cp ui/resources/html/base.txt /usr/local/wsgi/templates/base
 
 	groupadd -f qwifi
 	usermod -a -G qwifi www-data
