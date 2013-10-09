@@ -16,7 +16,7 @@ emulate: update-config
 
 	echo "Entered emulation mode."
 
-setup: setup-apache setup-pyqrencode setup-freeradius
+setup: setup-apache setup-pyqrencode setup-freeradius setup-service
 	apt-get install hostapd isc-dhcp-server mysql-server python-mysqldb
 	bash -c 'echo "manual" > /etc/init/hostapd.override'
 	bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
@@ -60,6 +60,9 @@ setup-apache:
 
 	mkdir -p /var/www/config
 	chown www-data:www-data /var/www/config
+
+setup-service:
+	apt-get install python-daemon
 
 update-config:
 	cp -vaur freeradius-conf/* /etc/freeradius/
