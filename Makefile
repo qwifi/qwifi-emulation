@@ -45,10 +45,14 @@ setup-apache:
 
 	#copy scripts
 	mkdir -p /usr/local/wsgi/scripts/
+	#make sure the destination is clean
+	rm -rf /usr/local/wsgi/scripts/*
 	cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
 	#copy templates
 	mkdir -p /usr/local/wsgi/templates/
+	#make sure the destination is clean
+	rm -rf /usr/local/wsgi/templates/*
 	cp ui/resources/html/base.txt /usr/local/wsgi/templates/base.txt
 
 	groupadd -f qwifi
