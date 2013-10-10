@@ -49,11 +49,11 @@ setup-apache:
 	rm -rf /usr/local/wsgi/scripts/*
 	cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
-	#copy templates
-	mkdir -p /usr/local/wsgi/templates/
+	#copy resources
+	mkdir -p /usr/local/wsgi/resources/
 	#make sure the destination is clean
-	rm -rf /usr/local/wsgi/templates/*
-	cp ui/resources/html/base.txt /usr/local/wsgi/templates/base
+	rm -rf /usr/local/wsgi/resources/*
+	cp -vaur ui/resources/* /usr/local/wsgi/resources/
 
 	groupadd -f qwifi
 	usermod -a -G qwifi www-data
