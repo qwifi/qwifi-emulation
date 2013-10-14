@@ -1,4 +1,4 @@
-emulate: update-config
+emulate: ui sync-config
 	killall hostapd || true
 
 	service network-manager stop || true
@@ -12,9 +12,11 @@ emulate: update-config
 	ifconfig wlan0 10.0.0.1/8
 
 	service isc-dhcp-server restart
-	service apache2 restart
 
 	echo "Entered emulation mode."
+
+ui: sync-ui
+	service apache2 restart
 
 setup: setup-apache setup-pyqrencode setup-freeradius setup-service
 	apt-get install hostapd isc-dhcp-server mysql-server python-mysqldb
@@ -37,12 +39,27 @@ setup-pyqrencode:
 	git clone https://github.com/bitly/pyqrencode.git /tmp/pyqrencode || true
 	cd /tmp/pyqrencode && python setup.py install
 
-setup-apache:
+setup-apache: sync-ui
 	apt-get install apache2 libapache2-mod-wsgi
 	cp ui/qwifi-site /etc/apache2/sites-available/qwifi
 	rm -f /etc/apache2/sites-enabled/000-default
 	ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
 
+	groupadd -f qwifi
+	usermod -a -G qwifi www-data
+
+	mkdir -p /var/www/config
+	chown www-data:www-data /var/www/config
+
+setup-service:
+	apt-get install python-daemon
+
+sync-config:
+	cp -vaur freeradius-conf/* /etc/freeradius/
+	chown -R root:freerad /etc/freeradius/*
+	cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
+
+sync-ui:
 	#copy scripts
 	mkdir -p /usr/local/wsgi/scripts/
 	#make sure the destination is clean
@@ -54,21 +71,6 @@ setup-apache:
 	#make sure the destination is clean
 	rm -rf /usr/local/wsgi/resources/*
 	cp -vaur ui/resources/* /usr/local/wsgi/resources/
-
-	groupadd -f qwifi
-	usermod -a -G qwifi www-data
-
-	mkdir -p /var/www/config
-	chown www-data:www-data /var/www/config
-
-setup-service:
-	apt-get install python-daemon
-
-update-config:
-	cp -vaur freeradius-conf/* /etc/freeradius/
-	chown -R root:freerad /etc/freeradius/*
-	cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
-	cp -vaur ui/scripts/* /usr/local/wsgi/scripts/
 
 normal:
 	killall hostapd || true
