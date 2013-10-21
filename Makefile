@@ -5,7 +5,6 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
-	service mysql restart
 	service freeradius restart
 
 	hostapd hostapd.conf -B
@@ -16,6 +15,7 @@ emulate: ui sync-config
 	echo "Entered emulation mode."
 
 ui: sync-ui
+	service mysql restart
 	service apache2 restart
 
 setup: setup-apache setup-pyqrencode setup-freeradius setup-service
