@@ -60,6 +60,10 @@ setup-apache: sync-ui
 	mkdir -p /var/www/config
 	chown www-data:www-data /var/www/config
 
+	cp -vaur servicers /etc/sudoers.d/servicers
+	chown root:root /etc/sudoers.d/servicers
+	chmod 440 /etc/sudoers.d/servicers
+
 setup-service:
 	apt-get install python-daemon
 
