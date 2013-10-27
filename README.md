@@ -1,7 +1,9 @@
 qwifi-emulation
 ===============
 
-Scripts and tools to configure a qwifi emulation environment
+Scripts and tools to configure a qwifi emulation environment.
+
+The qwifi service provides a simple and painless mechanism for short-term access to WiFi networks.
 
 Inital Setup
 ===============
