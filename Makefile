@@ -1,13 +1,11 @@
 emulate: ui sync-config
-	killall hostapd || true
-
 	service network-manager stop || true
 	service nslcd stop || true
 	service aiccu stop || true
 
 	service freeradius restart
 
-	hostapd hostapd.conf -B
+	service hostapd restart
 	ifconfig wlan0 10.0.0.1/8
 
 	service isc-dhcp-server restart
@@ -18,15 +16,26 @@ ui: sync-ui
 	service mysql restart
 	service apache2 restart
 
-setup: setup-apache setup-pyqrencode setup-freeradius setup-service
-	apt-get install hostapd isc-dhcp-server mysql-server python-mysqldb
-	bash -c 'echo "manual" > /etc/init/hostapd.override'
+setup: setup-apache setup-pyqrencode setup-freeradius setup-service setup-hostapd
+	apt-get install isc-dhcp-server mysql-server python-mysqldb
 	bash -c 'echo "manual" > /etc/init/isc-dhcp-server.override'
 
 	service mysql restart
 	mysql -p -u root < freeradius.sql || true
 	mysql -p -u root radius < freeradius-conf/sql/mysql/schema.sql || true
 	service mysql stop
+
+setup-hostapd:
+	apt-get install hostapd
+	bash -c 'echo "manual" > /etc/init/hostapd.override'
+	
+	cp -vaur hostapd.conf /etc/hostapd.conf
+	groupadd -f qwifi
+	chown root /etc/hostapd.conf
+	chgrp qwifi /etc/hostapd.conf
+	chmod g+w /etc/hostapd.conf
+	
+	cp -vaur hostapd.defaults /etc/default/hostapd
 
 setup-freeradius:
 	apt-get install freeradius freeradius-mysql 
@@ -58,6 +67,12 @@ sync-config:
 	cp -vaur freeradius-conf/* /etc/freeradius/
 	chown -R root:freerad /etc/freeradius/*
 	cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
+	
+	cp -vaur hostapd.conf /etc/hostapd.conf
+	groupadd -f qwifi
+	chown root /etc/hostapd.conf
+	chgrp qwifi /etc/hostapd.conf
+	chmod g+w /etc/hostapd.conf
 
 sync-ui:
 	#copy scripts
@@ -73,7 +88,7 @@ sync-ui:
 	cp -vaur ui/resources/* /usr/local/wsgi/resources/
 
 normal:
-	killall hostapd || true
+	service hostapd stop || true
 	service freeradius stop || true
 	service mysql stop || true
 	service isc-dhcp-server stop || true
