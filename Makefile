@@ -3,6 +3,7 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
+	service/src/qwifi.py -c service/src/qwifi.conf
 	service freeradius restart
 
 	service hostapd restart
@@ -92,6 +93,7 @@ sync-ui:
 	cp -vaur ui/resources/* /usr/local/wsgi/resources/
 
 normal:
+	kill `cat /var/run/qwifi.pid` || true
 	service hostapd stop || true
 	service freeradius stop || true
 	service mysql stop || true
