@@ -3,7 +3,7 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
-	service/src/qwifi.py -c service/src/qwifi.conf
+	service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 
 	service hostapd restart
