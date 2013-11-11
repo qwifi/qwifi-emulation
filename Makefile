@@ -1,4 +1,5 @@
 emulate: ui sync-config
+	service avahi-daemon stop || true
 	service network-manager stop || true
 	service nslcd stop || true
 	service aiccu stop || true
@@ -101,5 +102,6 @@ normal:
 	service apache2 stop || true
 
 	service network-manager restart
+	service avahi-daemon restart
 
 	echo "Normalization complete"
