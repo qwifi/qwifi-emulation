@@ -60,7 +60,8 @@ setup-apache: sync-ui
 	usermod -a -G qwifi www-data
 
 	mkdir -p /var/www/config
-	chown www-data:www-data /var/www/config
+	mkdir -p /var/www/codes
+	chown -R www-data:www-data /var/www
 
 	cp -vaur servicers /etc/sudoers.d/servicers
 	chown root:root /etc/sudoers.d/servicers
