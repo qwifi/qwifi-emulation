@@ -1,3 +1,1 @@
-User_Alias SERVICERS = www-data
-
-SERVICERS        ALL=(root)NOPASSWD:/usr/bin/service
+www-data ALL=(root) NOPASSWD: /usr/bin/service, /usr/sbin/service
