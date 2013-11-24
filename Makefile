@@ -17,6 +17,7 @@ emulate: ui sync-config
 ui: sync-ui
 	service mysql restart
 	service apache2 restart
+	service/src/qwifi.py -c /var/www/config/current
 
 setup: setup-apache setup-pyqrencode setup-freeradius setup-service setup-hostapd
 	apt-get install isc-dhcp-server mysql-server python-mysqldb
