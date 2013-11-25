@@ -15,6 +15,12 @@ emulate: ui sync-config
 
 	echo "Entered emulation mode."
 
+pi: ui sync-config
+	kill `cat /var/run/qwifi.pid`
+	service/src/qwifi.py -c /var/www/config/current
+	service freeradius restart
+	service hostapd restart
+
 ui: sync-ui
 	service mysql restart
 	service apache2 restart
