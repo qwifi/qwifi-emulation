@@ -4,7 +4,7 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
-	kill `cat /var/run/qwifi.pid`
+	kill `cat /var/run/qwifi.pid` || true
 	service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 
@@ -16,7 +16,7 @@ emulate: ui sync-config
 	echo "Entered emulation mode."
 
 pi: ui sync-config
-	kill `cat /var/run/qwifi.pid`
+	kill `cat /var/run/qwifi.pid` || true
 	service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 	service hostapd restart
