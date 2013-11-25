@@ -4,6 +4,7 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
+	kill `cat /var/run/qwifi.pid`
 	service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 
