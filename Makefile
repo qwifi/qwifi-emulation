@@ -4,8 +4,6 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
-	kill `cat /var/run/qwifi.pid` || true
-	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 
 	service hostapd restart
@@ -16,15 +14,14 @@ emulate: ui sync-config
 	echo "Entered emulation mode."
 
 pi: ui sync-config
-	kill `cat /var/run/qwifi.pid` || true
 	service freeradius restart
 	service hostapd restart
-	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 
 ui: sync-ui
+	kill `cat /var/run/qwifi.pid` || true
 	service mysql restart
 	service apache2 restart
-	service/src/qwifi.py -c /var/www/config/current
+	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 
 setup: setup-apache setup-pyqrencode setup-freeradius setup-service setup-hostapd
 	apt-get install isc-dhcp-server mysql-server python-mysqldb
