@@ -4,7 +4,8 @@ emulate: ui sync-config
 	service nslcd stop || true
 	service aiccu stop || true
 
-	service/src/qwifi.py -c /var/www/config/current
+	kill `cat /var/run/qwifi.pid` || true
+	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 
 	service hostapd restart
@@ -13,6 +14,12 @@ emulate: ui sync-config
 	service isc-dhcp-server restart
 
 	echo "Entered emulation mode."
+
+pi: ui sync-config
+	kill `cat /var/run/qwifi.pid` || true
+	service freeradius restart
+	service hostapd restart
+	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 
 ui: sync-ui
 	service mysql restart
@@ -32,11 +39,11 @@ setup-hostapd:
 	apt-get install hostapd
 	bash -c 'echo "manual" > /etc/init/hostapd.override'
 	
-	cp -vaur hostapd.conf /etc/hostapd.conf
+	cp -vaur hostapd.conf /etc/hostapd/hostapd.conf
 	groupadd -f qwifi
-	chown root /etc/hostapd.conf
-	chgrp qwifi /etc/hostapd.conf
-	chmod g+w /etc/hostapd.conf
+	chown root /etc/hostapd/hostapd.conf
+	chgrp qwifi /etc/hostapd/hostapd.conf
+	chmod g+w /etc/hostapd/hostapd.conf
 	
 	cp -vaur hostapd.defaults /etc/default/hostapd
 
@@ -76,11 +83,11 @@ sync-config:
 	chown -R root:freerad /etc/freeradius/*
 	cp -vaur dhcpd.conf /etc/dhcp/dhcpd.conf
 	
-	cp -vaur hostapd.conf /etc/hostapd.conf
+	cp -vaur hostapd.conf /etc/hostapd/hostapd.conf
 	groupadd -f qwifi
-	chown root /etc/hostapd.conf
-	chgrp qwifi /etc/hostapd.conf
-	chmod g+w /etc/hostapd.conf
+	chown root /etc/hostapd/hostapd.conf
+	chgrp qwifi /etc/hostapd/hostapd.conf
+	chmod g+w /etc/hostapd/hostapd.conf
 
 sync-ui:
 	#copy scripts
@@ -103,7 +110,7 @@ normal:
 	service isc-dhcp-server stop || true
 	service apache2 stop || true
 
-	service network-manager restart
-	service avahi-daemon restart
+	service network-manager restart || true
+	service avahi-daemon restart || true
 
 	echo "Normalization complete"
