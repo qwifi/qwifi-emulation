@@ -5,7 +5,7 @@ emulate: ui sync-config
 	service aiccu stop || true
 
 	kill `cat /var/run/qwifi.pid` || true
-	service/src/qwifi.py -c /var/www/config/current
+	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 
 	service hostapd restart
@@ -17,9 +17,9 @@ emulate: ui sync-config
 
 pi: ui sync-config
 	kill `cat /var/run/qwifi.pid` || true
-	service/src/qwifi.py -c /var/www/config/current
 	service freeradius restart
 	service hostapd restart
+	PYTHONPATH=/usr/local/wsgi/resources/python service/src/qwifi.py -c /var/www/config/current
 
 ui: sync-ui
 	service mysql restart
