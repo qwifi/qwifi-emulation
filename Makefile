@@ -56,7 +56,10 @@ setup-pyqrencode:
 	cd /tmp/pyqrencode && python setup.py install
 
 setup-apache: sync-ui
-	apt-get install apache2 libapache2-mod-wsgi
+	apt-get install apache2 libapache2-mod-wsgi python-pip
+
+	pip install python-dateutil
+
 	cp ui/qwifi-site /etc/apache2/sites-available/qwifi
 	rm -f /etc/apache2/sites-enabled/000-default
 	ln -sf /etc/apache2/sites-available/qwifi /etc/apache2/sites-enabled/000-qwifi
